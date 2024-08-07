@@ -287,14 +287,15 @@ namespace PKW
             foreach (KeyValuePair<string, List<string>> scriptName in scriptsName)
             {
                 string folder = GetFolderName(scriptName.Key);
+                string path = scriptPath;
                 if (!string.IsNullOrEmpty(folder))
                 {
-                    scriptPath = Combine(scriptPath, folder);
+                    path = Combine(path, folder);
                 }
 
                 foreach (string name in scriptName.Value)
                 {
-                    CreateScript(scriptPath, name, template);
+                    CreateScript(path, name, template);
                 }
             }
 
@@ -318,7 +319,7 @@ namespace PKW
 
 public class #SCRIPTNAME# : MonoBehaviour
 {
-    void Init()
+    public void Init()
     {
 
     }
