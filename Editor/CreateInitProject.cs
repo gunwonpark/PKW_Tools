@@ -228,7 +228,9 @@ namespace PKW
         {
             string rootProjectName = _projectName;
             CreateDefaultFolders(rootProjectName);
-            CreateScripts(rootProjectName, _scriptsName);
+            string _template = BaseTemplate;
+            _template = _template.Replace("#PROJECTNAME#", rootProjectName);
+            CreateScripts(rootProjectName, _scriptsName, _template);
             Refresh();
         }
         private static void CreateDefaultFolders(string root)
@@ -284,6 +286,7 @@ namespace PKW
         {
             string scriptPath = Combine(dataPath, root, "2.Scripts");
 
+
             foreach (KeyValuePair<string, List<string>> scriptName in scriptsName)
             {
                 string folder = GetFolderName(scriptName.Key);
@@ -317,14 +320,16 @@ namespace PKW
         private const string BaseTemplate =
 @"using UnityEngine;
 
-public class #SCRIPTNAME# : MonoBehaviour
+namespace #PROJECTNAME#
 {
-    public void Init()
+    public class #SCRIPTNAME# : MonoBehaviour
     {
+        public void Init()
+        {
 
+        }
     }
 }";
-
     }
 }
 
