@@ -297,6 +297,11 @@ namespace PKW
                     path = Combine(path, folder);
                 }
 
+                if (folder.Contains("Managers"))
+                {
+                    template = BaseManagerTemplate;
+                }
+
                 foreach (string name in scriptName.Value)
                 {
                     CreateScript(path, name, template);
@@ -326,6 +331,35 @@ namespace #PROJECTNAME#
     public class #SCRIPTNAME# : MonoBehaviour
     {
         public void Init()
+        {
+
+        }
+    }
+}";
+
+        private const string BaseManagerTemplate =
+@"namespace #PROJECTNAME#
+{
+    public class #SCRIPTNAME#
+    {
+        private #SCRIPTNAME# _instance;
+        public #SCRIPTNAME# Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new #SCRIPTNAME#();
+                }
+                return _instance;
+            }
+        }
+        public void Init()
+        {
+
+        }
+
+        public void Clear()
         {
 
         }
