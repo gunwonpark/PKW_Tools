@@ -286,6 +286,7 @@ namespace PKW
         {
             string scriptPath = Combine(dataPath, root, "2.Scripts");
 
+            template = template.Replace("#PROJECTNAME#", root);
 
             foreach (KeyValuePair<string, List<string>> scriptName in scriptsName)
             {
