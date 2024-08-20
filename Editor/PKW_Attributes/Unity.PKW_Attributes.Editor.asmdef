@@ -1,5 +1,5 @@
 {
-    "name": "com.unity.pkwtool.attribute",
+    "name": "Unity.PKW_Attributes.Editor",
     "rootNamespace": "PKW_Attributes",
     "references": [],
     "includePlatforms": [],
