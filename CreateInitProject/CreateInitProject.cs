@@ -12,6 +12,10 @@ using static UnityEngine.Application;
 
 namespace PKW
 {
+    /// <summary>
+    /// CreateDefaultProject는 기본적인 프로젝트 구조를 만들어 줍니다
+    /// CreateProject는 기초적인 폴더들만 생성해 줍니다
+    /// </summary>
     public class CreateInitProject : EditorWindow
     {
         private string _projectName;
@@ -22,7 +26,11 @@ namespace PKW
         private SearchField _searchField;
 
         private string _scriptFolderName;
+        private bool _useNamespace; // namespace를 사용할 건지
 
+        /// <summary>
+        /// 폴더의 경로를 Key로 생성할 스크립트들을 저장합니다
+        /// </summary>
         private Dictionary<string, List<string>> _scriptNames = new Dictionary<string, List<string>>();
 
 
@@ -44,6 +52,8 @@ namespace PKW
         private void OnEnable()
         {
             _projectName = EditorPrefs.GetString("ProjectName", "_project");
+            _useNamespace = EditorPrefs.GetBool("UseNameSpace", true);
+
             if (_treeViewState == null)
                 _treeViewState = new TreeViewState();
 
@@ -58,6 +68,7 @@ namespace PKW
         private void OnDisable()
         {
             EditorPrefs.SetString("ProjectName", _projectName);
+            EditorPrefs.SetBool("UseNameSpace", _useNamespace);
         }
 
         private void OnGUI()
@@ -91,8 +102,13 @@ namespace PKW
 
         private void ProjectName()
         {
-            GUILayout.Label("Enter your project name", EditorStyles.boldLabel);
-            _projectName = EditorGUILayout.TextField("Name:", _projectName);
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.Label("Enter your project name", EditorStyles.boldLabel);
+                _useNamespace = GUILayout.Toggle(_useNamespace, "Use Namespace");
+                _projectName = EditorGUILayout.TextField("Name:", _projectName);
+            }
+
         }
 
         private void AddScript()
@@ -224,19 +240,27 @@ namespace PKW
             CreateDefaultScripts(rootProjectName);
             Refresh();
         }
-        public static void CreateProject(string _projectName, Dictionary<string, List<string>> _scriptsName)
+
+        public static void CreateProject(string _projectName, Dictionary<string, List<string>> _scriptsName, bool _useNameSpace = true)
         {
-            string rootProjectName = _projectName;
-            CreateDefaultFolders(rootProjectName);
+            CreateDefaultFolders(_projectName);
+
             string _template = BaseTemplate;
-            _template = _template.Replace("#PROJECTNAME#", rootProjectName);
-            CreateScripts(rootProjectName, _scriptsName, _template);
+
+            if (_useNameSpace)
+            {
+                _template = BaseTemplateWithNamespace;
+                _template = _template.Replace("#PROJECTNAME#", _projectName);
+            }
+
+
+            CreateScripts(_projectName, _scriptsName, _template);
             Refresh();
         }
         private static void CreateDefaultFolders(string root)
         {
             // 순서대로 root 디렉토리의 이름 그다음은 그안에 생성시킬 폴더들을 나열하면 된다
-            CreateDirectorys(root, "1.Arts", "2.Scripts", "3.Prefabs", "4.Resources", "5.ScriptableObjects", "6.Scenes");
+            CreateDirectorys(root, "1_Arts", "2_Scripts", "3_Prefabs", "4_Resources", "5_Datas", "6_Scenes");
         }
         private static void CreateDirectorys(string root, params string[] dir)
         {
@@ -258,12 +282,14 @@ namespace PKW
             // Manager 스크립트 생성 방법
             List<string> createManagerScripts = new List<string>()
             {
+                "Manager",
                 "GameManager",
                 "DataManager",
-                "ResourceManager",
+                "ResourcesManager",
                 "UIManager",
                 "SoundManager",
                 "EffectManager",
+                "ObjectPoolManager",
                 "InputManager",
             };
 
@@ -325,6 +351,16 @@ namespace PKW
         }
         private const string BaseTemplate =
 @"using UnityEngine;
+public class #SCRIPTNAME# : MonoBehaviour
+{
+    public void Init()
+    {
+
+    }
+}";
+
+        private const string BaseTemplateWithNamespace =
+@"using UnityEngine;
 
 namespace #PROJECTNAME#
 {
@@ -338,6 +374,31 @@ namespace #PROJECTNAME#
 }";
 
         private const string BaseManagerTemplate =
+@"public class #SCRIPTNAME#
+{
+    private #SCRIPTNAME# _instance;
+    public #SCRIPTNAME# Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new #SCRIPTNAME#();
+            }
+            return _instance;
+        }
+    }
+    public void Init()
+    {
+
+    }
+
+    public void Clear()
+    {
+
+    }
+}";
+        private const string BaseManagerTemplateWithNamespace =
 @"namespace #PROJECTNAME#
 {
     public class #SCRIPTNAME#
