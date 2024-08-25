@@ -30,7 +30,7 @@ namespace PKW_Attributes
 
                     if (GUILayout.Button(buttonLabel))
                     {
-                        method.Invoke(monoBehaviour, null);
+                        method.Invoke(monoBehaviour, buttonAttribute.Parameter);
                     }
                 }
             }
