@@ -5,7 +5,7 @@ namespace PKW_Attributes
     public class ButtonAttributeTest : MonoBehaviour
     {
         public int testInt = 0;
-        [SerializeField]
+        public const string testString = "Hello";
 
         [Button("TestMethod")]
         public void TestMethod()
@@ -13,7 +13,7 @@ namespace PKW_Attributes
             Debug.Log("TestMethod");
         }
 
-        [Button("TestMethod2", "Hello")]
+        [Button("TestMethod2", testString)]
         public void TestMethod2(string _test)
         {
             Debug.Log(_test);
