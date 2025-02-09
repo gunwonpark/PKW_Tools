@@ -1,0 +1,14 @@
+{
+    "name": "Unity.PKW_Util.Editor",
+    "rootNamespace": "PKW_Tool",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

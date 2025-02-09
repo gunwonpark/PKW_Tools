@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using UnityEditor;
 using UnityEngine;
 
@@ -5,7 +6,8 @@ namespace PKW_Attributes
 {
     [CustomPropertyDrawer(typeof(SerializableDictionary<,>), true)]
     public class SerializableDictionaryDrawer : PropertyDrawer
-    {
+    {           
+        // 한글 주석 깨지나?
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             label = EditorGUI.BeginProperty(position, label, property);
@@ -15,23 +17,36 @@ namespace PKW_Attributes
 
             int count = keys.arraySize;
 
-            if (property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, label, true))
+            Rect foldoutRect = new Rect(position.x, position.y, position.width, position.height); 
+            property.isExpanded = EditorGUI.Foldout(foldoutRect, property.isExpanded, label, true);
+
+            
+            Rect countRect = new Rect(position.x + position.width - 48, position.y, 48, position.height);
+            using (new EditorGUI.DisabledScope(true))  
             {
-                // �� Ű
+                EditorGUI.IntField(countRect, count);  
+            }
+
+            if (property.isExpanded)
+            {
+                // 탭 키
                 EditorGUI.indentLevel++;
                 for (int i = 0; i < count; i++)
                 {
-                    EditorGUILayout.PropertyField(keys.GetArrayElementAtIndex(i), GUIContent.none);
-                    EditorGUILayout.PropertyField(values.GetArrayElementAtIndex(i), GUIContent.none);
-                }
+                    using(new EditorGUILayout.HorizontalScope())
+                    {
+                        var type = keys.GetArrayElementAtIndex(i).type;
 
-                if (GUILayout.Button("Add"))
-                {
-                    keys.arraySize++;
-                    values.arraySize++;
+                        //키 값은 수정할 수 없도록 만든다
+                        EditorGUI.BeginDisabledGroup(true);
+                        EditorGUILayout.PropertyField(keys.GetArrayElementAtIndex(i), GUIContent.none);
+                        EditorGUI.EndDisabledGroup();
+                        EditorGUILayout.PropertyField(values.GetArrayElementAtIndex(i), GUIContent.none);
+                    }
                 }
             }
-
+            
+            EditorGUI.EndProperty();
 
         }
     }

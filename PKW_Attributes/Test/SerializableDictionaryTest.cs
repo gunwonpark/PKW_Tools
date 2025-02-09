@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PKW_Attributes
@@ -7,7 +8,7 @@ namespace PKW_Attributes
         [SerializeField]
         SerializableDictionary<int, string> testDictionary = new SerializableDictionary<int, string>();
 
-        //[SerializeField] private List<int> keys = new List<int>();
+        [SerializeField] private List<int> keys = new List<int>();
         [Button("Test")]
         private void Test()
         {
