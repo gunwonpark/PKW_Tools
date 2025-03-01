@@ -18,4 +18,9 @@
    - 해당 ScriptableObject를 클릭하고 Save해주면 Datas 폴더에 json파일이 생성됩니다.
    - 해당 ScriptableObject를 클릭하고 Load해주면 Datas 폴더에 있던 json파일의 데이터를 불러옵니다.
 
+3. 아코디언메뉴 
+   - 아코디언 형식의 UI를 바로 생성해 볼수 있습니다.
+   - UI/Accordion을 통해 미리 확인할 수 있습니다
+   - 의존 패키지로 TextMeshPro를 요구합니다.
+
 
