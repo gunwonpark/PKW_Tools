@@ -21,6 +21,7 @@
 2. ScriptableObject와 json을 상호 변환해 줍니다
    - 해당 ScriptableObject를 클릭하고 Save해주면 Datas 폴더에 json파일이 생성됩니다.
    - 해당 ScriptableObject를 클릭하고 Load해주면 Datas 폴더에 있던 json파일의 데이터를 불러옵니다.
+     
 ![image](https://github.com/user-attachments/assets/65b7f946-7432-4ae8-b976-715c8db1ab98)
 
 
